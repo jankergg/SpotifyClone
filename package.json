@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:web": "npx nx test web --skip-nx-cache",
+    "test:mobile": "npx nx test mobile --skip-nx-cache"
   },
   "keywords": [],
   "author": "",
