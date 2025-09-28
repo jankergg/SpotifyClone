@@ -10,7 +10,10 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/web"
+        "outputPath": "dist/apps/web",
+        "env": {
+          "TAMAGUI_TARGET": "web"
+        }
       },
       "configurations": {
         "development": {
@@ -25,7 +28,10 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "web:build"
+        "buildTarget": "web:build",
+        "env": {
+          "TAMAGUI_TARGET": "web"
+        }
       },
       "configurations": {
         "development": {
@@ -43,7 +49,10 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "web:build"
+        "buildTarget": "web:build",
+        "env": {
+          "TAMAGUI_TARGET": "web"
+        }
       },
       "configurations": {
         "development": {

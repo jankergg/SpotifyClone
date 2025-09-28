@@ -18,5 +18,8 @@ module.exports = {
       'react-native/jest/assetFileTransformer.js'
     ),
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@tamagui|tamagui|react-native|react-native-vector-icons|@react-native|expo-linear-gradient)/)',
+  ],
   coverageDirectory: '../../coverage/libs/ui',
 };

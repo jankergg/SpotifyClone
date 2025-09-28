@@ -1,3 +1,4 @@
+import { YStack } from 'tamagui';
 import { Ui } from 'ui';
 
 const resources = [
@@ -20,8 +21,8 @@ const resources = [
 
 export function App() {
   return (
-    <div className="app-shell">
-      <main className="app-content">
+    <YStack f={1} ai="center" jc="center" px="$5" py="$7" w="100%">
+      <YStack w="100%" maxWidth={960} gap="$6">
         <Ui
           greeting="Continue building"
           title="One design system, every screen"
@@ -33,8 +34,8 @@ export function App() {
           }}
           actions={resources}
         />
-      </main>
-    </div>
+      </YStack>
+    </YStack>
   );
 }
 

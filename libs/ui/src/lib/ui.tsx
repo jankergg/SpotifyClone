@@ -2,14 +2,11 @@ import React, { useMemo } from 'react';
 import {
   Linking,
   Platform,
-  Pressable,
   StyleProp,
-  StyleSheet,
-  Text,
   TextStyle,
-  View,
   ViewStyle,
 } from 'react-native';
+import { Button, Paragraph, Text, Theme, YStack, styled } from 'tamagui';
 
 export interface WelcomeAction {
   label: string;
@@ -63,6 +60,120 @@ const openLink = async (href?: string) => {
   }
 };
 
+const Container = styled(YStack, {
+  name: 'WelcomeContainer',
+  gap: '$6',
+  width: '100%',
+  maxWidth: 560,
+});
+
+const HeroCard = styled(YStack, {
+  name: 'WelcomeHero',
+  gap: '$3',
+  px: '$6',
+  py: '$7',
+  borderRadius: '$8',
+  backgroundColor: '$backgroundFocus',
+  shadowColor: 'rgba(0,0,0,0.35)',
+  shadowOpacity: 1,
+  shadowRadius: 32,
+  shadowOffset: { width: 0, height: 20 },
+  elevation: 10,
+});
+
+const GreetingText = styled(Text, {
+  name: 'WelcomeGreeting',
+  fontSize: '$3',
+  letterSpacing: 1,
+  textTransform: 'uppercase',
+  color: '$color',
+  opacity: 0.7,
+});
+
+const TitleText = styled(Text, {
+  name: 'WelcomeTitle',
+  fontSize: '$9',
+  fontWeight: '700',
+  lineHeight: '$11',
+  letterSpacing: 0.5,
+  color: '$color',
+});
+
+const SubtitleText = styled(Text, {
+  name: 'WelcomeSubtitle',
+  fontSize: '$6',
+  fontWeight: '600',
+  color: '$accent',
+});
+
+const DescriptionText = styled(Paragraph, {
+  name: 'WelcomeDescription',
+  size: '$4',
+  color: '$color',
+  opacity: 0.85,
+  lineHeight: '$5',
+});
+
+const ActionsPanel = styled(YStack, {
+  name: 'WelcomeActionsPanel',
+  gap: '$4',
+  px: '$5',
+  py: '$5',
+  borderRadius: '$7',
+  borderWidth: 1,
+  borderColor: '$color6',
+  backgroundColor: '$background',
+});
+
+const PanelHeader = styled(Text, {
+  name: 'WelcomeActionsTitle',
+  fontSize: '$5',
+  fontWeight: '700',
+  color: '$color',
+});
+
+const ActionsStack = styled(YStack, {
+  name: 'WelcomeActionsStack',
+  gap: '$3',
+});
+
+const ActionButton = styled(Button, {
+  name: 'WelcomeActionButton',
+  unstyled: true,
+  w: '100%',
+  px: '$4',
+  py: '$3',
+  borderRadius: '$6',
+  backgroundColor: '$backgroundHover',
+  alignItems: 'flex-start',
+  hoverStyle: {
+    backgroundColor: '$backgroundFocus',
+  },
+  pressStyle: {
+    backgroundColor: '$accentHover',
+  },
+  focusVisibleStyle: {
+    outlineWidth: 2,
+    outlineColor: '$accent',
+    outlineStyle: 'solid',
+  },
+});
+
+const ActionLabel = styled(Text, {
+  name: 'WelcomeActionLabel',
+  fontSize: '$4',
+  fontWeight: '600',
+  color: '$color',
+});
+
+const ActionCaption = styled(Paragraph, {
+  name: 'WelcomeActionCaption',
+  size: '$3',
+  color: '$color',
+  opacity: 0.7,
+  mt: '$1',
+});
+
 export function Ui({
   greeting = 'Hello there,',
   title,
@@ -85,167 +196,62 @@ export function Ui({
   }, [callToAction]);
 
   return (
-    <View style={[styles.container, style]}>
-      <View style={styles.hero}>
-        <Text accessibilityRole="text" style={styles.greeting}>
-          {greeting}
-        </Text>
-        <Text accessibilityRole="header" style={[styles.title, titleStyle]}>
-          {title}
-        </Text>
-        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
-        {description ? (
-          <Text style={styles.description}>{description}</Text>
-        ) : null}
-        {resolvedCallToAction ? (
-          <Pressable
-            accessibilityRole={Platform.OS === 'web' ? 'button' : undefined}
-            style={({ pressed }) => [styles.cta, pressed && styles.ctaPressed]}
-            onPress={resolvedCallToAction.onPress}
-          >
-            <Text style={styles.ctaText}>{resolvedCallToAction.label}</Text>
-          </Pressable>
-        ) : null}
-      </View>
-
-      {hasActions ? (
-        <View style={styles.panel}>
-          <Text style={styles.panelTitle}>Learn & explore</Text>
-          {actions.map(({ label, caption, onPress, href }, index) => (
-            <Pressable
-              key={`${label}-${index}`}
-              accessibilityRole={Platform.OS === 'web' ? 'link' : undefined}
-              style={({ pressed }) => [
-                styles.action,
-                pressed && styles.actionPressed,
-              ]}
-              onPress={onPress ?? (() => openLink(href))}
+    <Theme name="spotifyDark">
+      <Container style={style}>
+        <HeroCard>
+          <GreetingText accessibilityRole="text">{greeting}</GreetingText>
+          <TitleText accessibilityRole="header" style={titleStyle}>
+            {title}
+          </TitleText>
+          {subtitle ? <SubtitleText>{subtitle}</SubtitleText> : null}
+          {description ? (
+            <DescriptionText>{description}</DescriptionText>
+          ) : null}
+          {resolvedCallToAction ? (
+            <Button
+              size="$4"
+              borderRadius="$10"
+              alignSelf="flex-start"
+              backgroundColor="$accent"
+              color="$background"
+              hoverStyle={{ backgroundColor: '$accentHover' }}
+              pressStyle={{ backgroundColor: '$accentFocus' }}
+              accessibilityRole={Platform.OS === 'web' ? 'button' : undefined}
+              onPress={resolvedCallToAction.onPress}
             >
-              <View>
-                <Text style={styles.actionLabel}>{label}</Text>
-                {caption ? (
-                  <Text style={styles.actionCaption}>{caption}</Text>
-                ) : null}
-              </View>
-            </Pressable>
-          ))}
-        </View>
-      ) : null}
-    </View>
+              {resolvedCallToAction.label}
+            </Button>
+          ) : null}
+        </HeroCard>
+
+        {hasActions ? (
+          <Theme name="spotifyLight">
+            <ActionsPanel>
+              <PanelHeader>Learn & explore</PanelHeader>
+              <ActionsStack>
+                {actions.map(({ label, caption, onPress, href }, index) => (
+                  <ActionButton
+                    key={`${label}-${index}`}
+                    onPress={onPress ?? (() => openLink(href))}
+                    accessibilityRole={
+                      Platform.OS === 'web' ? 'link' : undefined
+                    }
+                  >
+                    <YStack gap="$1">
+                      <ActionLabel>{label}</ActionLabel>
+                      {caption ? (
+                        <ActionCaption>{caption}</ActionCaption>
+                      ) : null}
+                    </YStack>
+                  </ActionButton>
+                ))}
+              </ActionsStack>
+            </ActionsPanel>
+          </Theme>
+        ) : null}
+      </Container>
+    </Theme>
   );
 }
-
-const heroShadow: ViewStyle =
-  Platform.select<ViewStyle>({
-    web: {
-      boxShadow: '0 32px 80px rgba(0, 0, 0, 0.45)',
-    } as ViewStyle,
-    ios: {
-      shadowColor: '#000',
-      shadowOpacity: 0.3,
-      shadowRadius: 20,
-      shadowOffset: { width: 0, height: 12 },
-    },
-    android: {
-      elevation: 6,
-      shadowColor: '#000',
-      shadowOpacity: 0.2,
-      shadowRadius: 12,
-      shadowOffset: { width: 0, height: 6 },
-    },
-    default: {
-      shadowColor: '#000',
-      shadowOpacity: 0.2,
-      shadowRadius: 16,
-      shadowOffset: { width: 0, height: 10 },
-      elevation: 6,
-    },
-  }) ?? {};
-
-const styles = StyleSheet.create({
-  container: {
-    gap: 24,
-  },
-  hero: {
-    borderRadius: 24,
-    backgroundColor: '#121212',
-    paddingVertical: 32,
-    paddingHorizontal: 28,
-    gap: 12,
-    ...(heroShadow as ViewStyle),
-  },
-  greeting: {
-    color: '#b3b3b3',
-    fontSize: 16,
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-  },
-  title: {
-    color: '#ffffff',
-    fontSize: 36,
-    fontWeight: '700',
-    letterSpacing: 0.4,
-  },
-  subtitle: {
-    color: '#1ed760',
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  description: {
-    color: '#e5e5e5',
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  cta: {
-    marginTop: 8,
-    backgroundColor: '#1ed760',
-    borderRadius: 999,
-    paddingHorizontal: 28,
-    paddingVertical: 12,
-    alignSelf: 'flex-start',
-  },
-  ctaPressed: {
-    backgroundColor: '#18b44e',
-  },
-  ctaText: {
-    color: '#121212',
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 0.6,
-  },
-  panel: {
-    borderRadius: 24,
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-    borderWidth: 1,
-    borderColor: '#e5e5e5',
-    gap: 16,
-  },
-  panelTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#121212',
-  },
-  action: {
-    paddingVertical: 12,
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    backgroundColor: 'rgba(18, 18, 18, 0.02)',
-  },
-  actionPressed: {
-    backgroundColor: 'rgba(30, 215, 96, 0.15)',
-  },
-  actionLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#121212',
-  },
-  actionCaption: {
-    marginTop: 4,
-    fontSize: 14,
-    color: '#6b7280',
-  },
-});
 
 export default Ui;

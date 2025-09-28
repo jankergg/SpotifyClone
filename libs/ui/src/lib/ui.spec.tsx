@@ -1,6 +1,8 @@
 import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { TamaguiProvider } from 'tamagui';
 
+import config from '../../tamagui.config';
 import Ui from './ui';
 
 afterEach(() => {
@@ -8,8 +10,15 @@ afterEach(() => {
 });
 
 describe('Ui', () => {
+  const renderWithProvider = (ui: React.ReactElement) =>
+    render(
+      <TamaguiProvider config={config} defaultTheme="spotifyDark">
+        {ui}
+      </TamaguiProvider>
+    );
+
   it('renders the provided content', () => {
-    const { getByText } = render(
+    const { getByText } = renderWithProvider(
       <Ui
         greeting="hi"
         title="Discover mixes"
@@ -38,7 +47,7 @@ describe('Ui', () => {
       .spyOn(linking, 'openURL')
       .mockResolvedValue(undefined);
 
-    const { getByText } = render(
+    const { getByText } = renderWithProvider(
       <Ui
         title="Discover mixes"
         callToAction={{ label: 'Open mixes', href: 'https://example.com' }}

@@ -9,13 +9,20 @@
       "executor": "@nx/react-native:start",
       "dependsOn": [],
       "options": {
-        "port": 8081
+        "port": 8081,
+        "env": {
+          "TAMAGUI_TARGET": "native"
+        }
       }
     },
     "run-ios": {
       "executor": "@nx/react-native:run-ios",
       "dependsOn": [],
-      "options": {}
+      "options": {
+        "env": {
+          "TAMAGUI_TARGET": "native"
+        }
+      }
     },
     "bundle-ios": {
       "executor": "@nx/react-native:bundle",
@@ -24,13 +31,20 @@
       "options": {
         "entryFile": "src/main.tsx",
         "platform": "ios",
-        "bundleOutput": "dist/apps/mobile/ios/main.jsbundle"
+        "bundleOutput": "dist/apps/mobile/ios/main.jsbundle",
+        "env": {
+          "TAMAGUI_TARGET": "native"
+        }
       }
     },
     "run-android": {
       "executor": "@nx/react-native:run-android",
       "dependsOn": [],
-      "options": {}
+      "options": {
+        "env": {
+          "TAMAGUI_TARGET": "native"
+        }
+      }
     },
     "build-android": {
       "executor": "@nx/react-native:build-android",
@@ -39,13 +53,21 @@
         "{projectRoot}/android/app/build/outputs/apk"
       ],
       "dependsOn": [],
-      "options": {}
+      "options": {
+        "env": {
+          "TAMAGUI_TARGET": "native"
+        }
+      }
     },
     "build-ios": {
       "executor": "@nx/react-native:build-ios",
       "outputs": ["{projectRoot}/ios/build/Build"],
       "dependsOn": [],
-      "options": {}
+      "options": {
+        "env": {
+          "TAMAGUI_TARGET": "native"
+        }
+      }
     },
     "pod-install": {
       "executor": "@nx/react-native:pod-install",
@@ -64,7 +86,10 @@
       "options": {
         "entryFile": "src/main.tsx",
         "platform": "android",
-        "bundleOutput": "dist/apps/mobile/android/main.jsbundle"
+        "bundleOutput": "dist/apps/mobile/android/main.jsbundle",
+        "env": {
+          "TAMAGUI_TARGET": "native"
+        }
       }
     },
     "sync-deps": {
@@ -76,7 +101,10 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/mobile"
+        "outputPath": "dist/apps/mobile",
+        "env": {
+          "TAMAGUI_TARGET": "web"
+        }
       },
       "configurations": {
         "development": {
@@ -91,7 +119,10 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "mobile:build"
+        "buildTarget": "mobile:build",
+        "env": {
+          "TAMAGUI_TARGET": "web"
+        }
       },
       "configurations": {
         "development": {
@@ -109,7 +140,10 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "mobile:build"
+        "buildTarget": "mobile:build",
+        "env": {
+          "TAMAGUI_TARGET": "web"
+        }
       },
       "configurations": {
         "development": {

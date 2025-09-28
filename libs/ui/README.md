@@ -1,6 +1,6 @@
 # UI library
 
-Shared React Native UI primitives for the Spotify clone experience. Components are authored with React Native primitives so they can render inside both the Expo/React Native runtime and the React DOM runtime (via `react-native-web`).
+Shared Tamagui-driven UI primitives for the Spotify clone experience. Components leverage Tamagui's cross-platform stack so they render consistently inside both the React Native runtime and React DOM (via `react-native-web`).
 
 ## Usage
 
@@ -26,14 +26,16 @@ export function HomeScreen() {
 }
 ```
 
+> Wrap your application tree with `TamaguiProvider` (see `apps/mobile/src/app/App.tsx` or `apps/web/src/main.tsx`) so the component receives the shared theme configuration.
+
 ### Web integration
 
-- Vite is configured (`apps/web/vite.config.ts`) to alias `react-native` to `react-native-web`.
-- Jest is configured (`apps/web/jest.config.ts`) with the same alias so tests run against the web renderer.
+- Vite uses the Tamagui Vite plugin (`apps/web/vite.config.ts`) to extract styles and feed the design tokens to the bundler.
+- Jest is configured (`apps/web/jest.config.ts`) to transform Tamagui packages, inject the config, and set `TAMAGUI_TARGET=web` during tests.
 
 ### Mobile integration
 
-Use the component inside React Native screens. Linking actions fall back to `Linking.openURL` when only an `href` is provided.
+Use the component inside React Native screens. Tamagui theme tokens are provided by `TamaguiProvider` in `apps/mobile/src/app/App.tsx`, and linking actions fall back to `Linking.openURL` when only an `href` is provided.
 
 ## Running unit tests
 

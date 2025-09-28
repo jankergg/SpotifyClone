@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
@@ -28,51 +29,91 @@ const rollupPlugin = (matchers: RegExp[]) => ({
   },
 });
 
-export default defineConfig({
-  root: __dirname,
-  cacheDir: '../../node_modules/.vite/apps/mobile',
-  define: {
-    global: 'window',
-  },
-  resolve: {
-    extensions,
-    alias: {
-      'react-native': 'react-native-web',
-      'react-native-svg': 'react-native-svg-web',
-      '@react-native/assets-registry/registry':
-        'react-native-web/dist/modules/AssetRegistry/index',
+const tamaguiConfigFile = join(__dirname, '../../libs/ui/tamagui.config.ts');
+const inlineEnvPlugin = join(
+  __dirname,
+  '../../tools/babel/inline-tamagui-target.js'
+);
+const uiPackagePath = join(__dirname, '../../libs/ui/src/index.ts');
+
+export default defineConfig(async () => {
+  const { tamaguiExtractPlugin, tamaguiPlugin } = await import(
+    '@tamagui/vite-plugin'
+  );
+
+  return {
+    root: __dirname,
+    cacheDir: '../../node_modules/.vite/apps/mobile',
+    define: {
+      global: 'window',
+      'process.env.TAMAGUI_TARGET': JSON.stringify(
+        process.env.TAMAGUI_TARGET ?? 'web'
+      ),
     },
-  },
-  build: {
-    reportCompressedSize: true,
-    commonjsOptions: { transformMixedEsModules: true },
-    outDir: '../../dist/apps/mobile/web',
-    rollupOptions: {
-      plugins: [rollupPlugin([/react-native-vector-icons/])],
+    resolve: {
+      extensions,
+      alias: {
+        'react-native': 'react-native-web',
+        'react-native-svg': 'react-native-svg-web',
+        '@react-native/assets-registry/registry':
+          'react-native-web/dist/modules/AssetRegistry/index',
+      },
     },
-  },
-  server: {
-    port: 4200,
-    host: 'localhost',
-    fs: {
-      // Allow serving files from one level up to the project root
-      allow: ['..'],
+    build: {
+      reportCompressedSize: true,
+      commonjsOptions: { transformMixedEsModules: true },
+      outDir: '../../dist/apps/mobile/web',
+      rollupOptions: {
+        plugins: [rollupPlugin([/react-native-vector-icons/])],
+      },
     },
-  },
-  preview: {
-    port: 4300,
-    host: 'localhost',
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      resolveExtensions: extensions,
-      jsx: 'automatic',
-      loader: { '.js': 'jsx' },
+    server: {
+      port: 4200,
+      host: 'localhost',
+      fs: {
+        // Allow serving files from one level up to the project root
+        allow: ['..'],
+      },
     },
-  },
-  plugins: [react(), nxViteTsPaths()],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
+    preview: {
+      port: 4300,
+      host: 'localhost',
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        resolveExtensions: extensions,
+        jsx: 'automatic',
+        loader: { '.js': 'jsx' },
+      },
+    },
+    plugins: [
+      tamaguiPlugin({
+        config: tamaguiConfigFile,
+        components: ['tamagui', uiPackagePath],
+      }),
+      tamaguiExtractPlugin({
+        config: tamaguiConfigFile,
+      }),
+      react({
+        babel: {
+          plugins: [
+            [inlineEnvPlugin],
+            [
+              '@tamagui/babel-plugin',
+              {
+                config: tamaguiConfigFile,
+                components: ['tamagui', uiPackagePath],
+                logTimings: process.env.NODE_ENV === 'development',
+              },
+            ],
+          ],
+        },
+      }),
+      nxViteTsPaths(),
+    ],
+    // Uncomment this if you are using workers.
+    // worker: {
+    //  plugins: [ nxViteTsPaths() ],
+    // },
+  };
 });
