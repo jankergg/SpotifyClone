@@ -1,0 +1,124 @@
+{
+  "name": "mobile",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/mobile/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "start": {
+      "executor": "@nx/react-native:start",
+      "dependsOn": [],
+      "options": {
+        "port": 8081
+      }
+    },
+    "run-ios": {
+      "executor": "@nx/react-native:run-ios",
+      "dependsOn": [],
+      "options": {}
+    },
+    "bundle-ios": {
+      "executor": "@nx/react-native:bundle",
+      "dependsOn": [],
+      "outputs": ["{options.bundleOutput}"],
+      "options": {
+        "entryFile": "src/main.tsx",
+        "platform": "ios",
+        "bundleOutput": "dist/apps/mobile/ios/main.jsbundle"
+      }
+    },
+    "run-android": {
+      "executor": "@nx/react-native:run-android",
+      "dependsOn": [],
+      "options": {}
+    },
+    "build-android": {
+      "executor": "@nx/react-native:build-android",
+      "outputs": [
+        "{projectRoot}/android/app/build/outputs/bundle",
+        "{projectRoot}/android/app/build/outputs/apk"
+      ],
+      "dependsOn": [],
+      "options": {}
+    },
+    "build-ios": {
+      "executor": "@nx/react-native:build-ios",
+      "outputs": ["{projectRoot}/ios/build/Build"],
+      "dependsOn": [],
+      "options": {}
+    },
+    "pod-install": {
+      "executor": "@nx/react-native:pod-install",
+      "dependsOn": ["sync-deps"],
+      "outputs": ["{projectRoot}/ios/Pods", "{projectRoot}/ios/Podfile.lock"],
+      "options": {}
+    },
+    "upgrade": {
+      "executor": "@nx/react-native:upgrade",
+      "options": {}
+    },
+    "bundle-android": {
+      "executor": "@nx/react-native:bundle",
+      "dependsOn": [],
+      "outputs": ["{options.bundleOutput}"],
+      "options": {
+        "entryFile": "src/main.tsx",
+        "platform": "android",
+        "bundleOutput": "dist/apps/mobile/android/main.jsbundle"
+      }
+    },
+    "sync-deps": {
+      "executor": "@nx/react-native:sync-deps",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/mobile"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "mobile:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "mobile:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "mobile:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "dependsOn": ["build"],
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "mobile:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "mobile:build:development"
+        },
+        "production": {
+          "buildTarget": "mobile:build:production"
+        }
+      }
+    }
+  }
+}
