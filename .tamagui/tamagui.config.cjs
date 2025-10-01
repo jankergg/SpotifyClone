@@ -27,7 +27,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// tamagui.config.ts
+// libs/ui/tamagui.config.ts
 var tamagui_config_exports = {};
 __export(tamagui_config_exports, {
   default: () => tamagui_config_default
@@ -2418,8 +2418,8 @@ Expected a subset of: ${expected.join(", ")}
   return tamaguiConfig;
 };
 
-// tamagui.config.ts
-var spotifyDark = {
+// libs/ui/themes/spotify-dark.theme.ts
+var spotifyDarkTheme = {
   ...config2.themes.dark,
   background: "#050505",
   backgroundFocus: "#121212",
@@ -2430,7 +2430,9 @@ var spotifyDark = {
   accentFocus: "#19c95c",
   accentHover: "#23e06b"
 };
-var spotifyLight = {
+
+// libs/ui/themes/spotify-light.theme.ts
+var spotifyLightTheme = {
   ...config2.themes.light,
   background: "#f9fafb",
   backgroundHover: "#f3f4f6",
@@ -2441,14 +2443,16 @@ var spotifyLight = {
   accentHover: "#1ed760",
   accentFocus: "#1aa34a"
 };
+
+// libs/ui/tamagui.config.ts
 var config3 = createTamagui({
   ...config2,
   shorthands,
   defaultTheme: "spotifyDark",
   themes: {
     ...config2.themes,
-    spotifyDark,
-    spotifyLight
+    spotifyDark: spotifyDarkTheme,
+    spotifyLight: spotifyLightTheme
   }
 });
 var tamagui_config_default = config3;

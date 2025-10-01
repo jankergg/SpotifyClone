@@ -144,7 +144,7 @@ const ActionButton = styled(Button, {
   px: '$4',
   py: '$3',
   borderRadius: '$6',
-  backgroundColor: '$backgroundHover',
+  backgroundColor: '$backgroundLight',
   alignItems: 'flex-start',
   hoverStyle: {
     backgroundColor: '$backgroundFocus',
@@ -196,11 +196,11 @@ export function Ui({
   }, [callToAction]);
 
   return (
-    <Theme name="spotifyDark">
+    <Theme name="spotifyLight">
       <Container style={style}>
         <HeroCard>
-          <GreetingText accessibilityRole="text">{greeting}</GreetingText>
-          <TitleText accessibilityRole="header" style={titleStyle}>
+          <GreetingText role="note">{greeting}</GreetingText>
+          <TitleText role="heading" style={titleStyle}>
             {title}
           </TitleText>
           {subtitle ? <SubtitleText>{subtitle}</SubtitleText> : null}
@@ -212,11 +212,14 @@ export function Ui({
               size="$4"
               borderRadius="$10"
               alignSelf="flex-start"
-              backgroundColor="$accent"
-              color="$background"
-              hoverStyle={{ backgroundColor: '$accentHover' }}
+              borderColor="$accentHover"
+              color="$color"
+              hoverStyle={{
+                backgroundColor: '$accentHover',
+                borderColor: '$color',
+              }}
               pressStyle={{ backgroundColor: '$accentFocus' }}
-              accessibilityRole={Platform.OS === 'web' ? 'button' : undefined}
+              role={Platform.OS === 'web' ? 'button' : undefined}
               onPress={resolvedCallToAction.onPress}
             >
               {resolvedCallToAction.label}

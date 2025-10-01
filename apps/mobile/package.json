@@ -2,6 +2,9 @@
   "name": "mobile",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "start:android": "TAMAGUI_TARGET=native npx react-native run-android"
+  },
   "dependencies": {
     "@react-native/metro-config": "*",
     "react": "*",
